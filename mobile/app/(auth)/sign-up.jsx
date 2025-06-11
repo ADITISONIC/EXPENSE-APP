@@ -67,8 +67,12 @@ export default function SignUpScreen() {
       if(err.errors[0]?.[0]?.code==="form_identifier_exists"){
         setError("Email already exists")
       }
-      else{
-        setError("Error occured Try again later")
+      else if (err.errors[0]?.[0]?.code === "form_password_length_too_short") {
+        setError("Password is too short");
+      } else if (err.errors[0]?.[0]?.code === "form_password_pwned") {
+        setError("Please enter a strong password");
+      } else {
+        setError("Error occured Try again later");
       }
     }
   };
