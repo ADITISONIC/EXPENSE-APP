@@ -64,7 +64,12 @@ export default function SignUpScreen() {
     } catch (err) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
-      console.error(JSON.stringify(err, null, 2));
+      if(err.errors[0]?.[0]?.code==="form_identifier_exists"){
+        setError("Email already exists")
+      }
+      else{
+        setError("Error occured Try again later")
+      }
     }
   };
 
@@ -95,33 +100,43 @@ export default function SignUpScreen() {
   }
 
   return (
-    <View style={{flex:1,alignItems:"center",justifyContent:"center"}}>
-      <View style={styles.container}>
-        <Image source={require("../../assets/images/revenue-i2.png")} style={styles.illustration}/>
-        <Text style={styles.title}>Sign up</Text>
-        <TextInput
-        style={[styles.input,error&&styles.errorInput]}
-          autoCapitalize="none"
-          value={emailAddress}
-          placeholder="Enter email"
-          onChangeText={(email) => setEmailAddress(email)}
-        />
-        <TextInput
-        style={[styles.input,error&&styles.errorInput]}
-          value={password}
-          placeholder="Enter password"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-        />
-        <TouchableOpacity onPress={onSignUpPress} style={styles.button}>
-          <Text style={styles.buttonText}>Continue</Text>
-        </TouchableOpacity>
-        <View style={styles.footerContainer}>
-          <Text style={styles.footerText}>Already have an account?</Text>
-          <Link href="/sign-in">
-            <Text style={styles.linkText}>Sign in</Text>
-          </Link>
+    <View style={styles.container}>
+      <Image
+        source={require("../../assets/images/revenue-i2.png")}
+        style={styles.illustration}
+      />
+      <Text style={styles.title}>Sign up</Text>
+      <TextInput
+        style={[styles.input, error && styles.errorInput]}
+        autoCapitalize="none"
+        value={emailAddress}
+        placeholder="Enter email"
+        onChangeText={(email) => setEmailAddress(email)}
+      />
+      <TextInput
+        style={[styles.input, error && styles.errorInput]}
+        value={password}
+        placeholder="Enter password"
+        secureTextEntry={true}
+        onChangeText={(password) => setPassword(password)}
+      />
+      {error ? (
+        <View style={styles.errorBox}>
+          <Ionicons name="alert-circle" size={20} color={COLORS.expense} />
+          <Text style={styles.errorText}>{error}</Text>
+          <TouchableOpacity onPress={() => setError("")}>
+            <Ionicons name="close" size={20} color={COLORS.textLight} />
+          </TouchableOpacity>
         </View>
+      ) : null}
+      <TouchableOpacity onPress={onSignUpPress} style={styles.button}>
+        <Text style={styles.buttonText}>Continue</Text>
+      </TouchableOpacity>
+      <View style={styles.footerContainer}>
+        <Text style={styles.footerText}>Already have an account?</Text>
+        <Link href="/sign-in">
+          <Text style={styles.linkText}>Sign in</Text>
+        </Link>
       </View>
     </View>
   );

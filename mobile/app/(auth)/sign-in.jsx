@@ -1,7 +1,9 @@
 import { useSignIn } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View,Image } from "react-native";
 import React from "react";
+import { styles } from "../../assets/styles/auth.styles";
+import { useState } from "react";
 
 export default function Page() {
   const { signIn, setActive, isLoaded } = useSignIn();
@@ -9,6 +11,7 @@ export default function Page() {
 
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [error,setError] = useState("")
 
   // Handle the submission of the sign-in form
   const onSignInPress = async () => {
@@ -34,31 +37,51 @@ export default function Page() {
     } catch (err) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
-      console.error(JSON.stringify(err, null, 2));
+      if(err.errors[0]?.[0]?.code==="form_password_incorrect"){
+        setError("Password is incorrect, Try again")
+      }
+      else{
+        setError("An Error occured try again")
+      }
     }
   };
 
   return (
-    <View>
-      <Text>Sign in</Text>
+    <View style={styles.container}>
+      <Image
+        source={require("../../assets/images/revenue-i4.png")}
+        style={styles.illustration}
+      />
+      <Text style={styles.title}>Sign in</Text>
       <TextInput
+        style={styles.input}
         autoCapitalize="none"
         value={emailAddress}
         placeholder="Enter email"
         onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
       />
       <TextInput
+        style={styles.input}
         value={password}
         placeholder="Enter password"
         secureTextEntry={true}
         onChangeText={(password) => setPassword(password)}
       />
-      <TouchableOpacity onPress={onSignInPress}>
-        <Text>Continue</Text>
+      {error ? (
+        <View style={styles.errorBox}>
+          <Ionicons name="alert-circle" size={20} color={COLORS.expense} />
+          <Text style={styles.errorText}>{error}</Text>
+          <TouchableOpacity onPress={() => setError("")}>
+            <Ionicons name="close" size={20} color={COLORS.textLight} />
+          </TouchableOpacity>
+        </View>
+      ) : null}
+      <TouchableOpacity onPress={onSignInPress} style={styles.button}>
+        <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
-      <View style={{ display: "flex", flexDirection: "row", gap: 3 }}>
+      <View style={styles.footerContainer}>
         <Link href="/sign-up">
-          <Text>Sign up</Text>
+          <Text style={styles.linkText}>Sign up</Text>
         </Link>
       </View>
     </View>
