@@ -1,8 +1,9 @@
 import { useCallback } from "react"
 import { useState } from "react"
 
-const API_URL = "http://localhost:5003/api"
-
+const API_URL = "https://wallet-api-2ol0.onrender.com/api";
+//const API_URL = "https://localhost:5003/api";
+//const API_URL = "http://192.168.X.X:5003/api"; // Replace with your actual IP
 export const useTransactions = (userId)=>{
   const [transactions,setTransaction] = useState([])
   const [summary,setSummary] = useState({
@@ -31,6 +32,7 @@ export const useTransactions = (userId)=>{
   }, [userId]);
   const loadData = useCallback(async()=>{
     if(!userId){
+        console.warn("No userId provided");
         return
     }
     setIsLoading(true)

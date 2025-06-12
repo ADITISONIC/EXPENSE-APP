@@ -2,11 +2,12 @@ import express from "express"
 import dotenv from "dotenv"
 import { sql } from "./config/db.js"
 import ratelimiter from "./middleware/ratelimiter.js"
+import job from "./config/cron.js"
 
 dotenv.config()
 const PORT = process.env.PORT
 const app = express()
-app.use(ratelimiter)
+if(process.env.NODE_ENV==="production")job.start()
 app.use(express.json())
 async function initDB(){
     try {
@@ -25,8 +26,8 @@ async function initDB(){
     }
 }
 
-app.get("/",(req,res)=>{
-    res.send("Its working")
+app.get("/api/health",(req,res)=>{
+    res.status(200).json
 })
 
 app.get("/api/transactions/:userId", async (req, res) => {

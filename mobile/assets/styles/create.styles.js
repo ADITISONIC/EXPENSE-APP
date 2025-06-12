@@ -158,4 +158,10 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  inputField: {
+    flex: 1,
+    paddingVertical: 10,
+    fontSize: 16,
+    color: COLORS.text,
+  },
 });

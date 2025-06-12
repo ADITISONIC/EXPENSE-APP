@@ -4,6 +4,8 @@ import { Text, TextInput, TouchableOpacity, View,Image } from "react-native";
 import React from "react";
 import { styles } from "../../assets/styles/auth.styles";
 import { useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { COLORS } from "../../constants/colors";
 
 export default function Page() {
   const { signIn, setActive, isLoaded } = useSignIn();
@@ -67,15 +69,7 @@ export default function Page() {
         secureTextEntry={true}
         onChangeText={(password) => setPassword(password)}
       />
-      {error ? (
-        <View style={styles.errorBox}>
-          <Ionicons name="alert-circle" size={20} color={COLORS.expense} />
-          <Text style={styles.errorText}>{error}</Text>
-          <TouchableOpacity onPress={() => setError("")}>
-            <Ionicons name="close" size={20} color={COLORS.textLight} />
-          </TouchableOpacity>
-        </View>
-      ) : null}
+     
       <TouchableOpacity onPress={onSignInPress} style={styles.button}>
         <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
