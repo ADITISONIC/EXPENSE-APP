@@ -21,7 +21,8 @@ import NoTransactionFound from "../../components/NoTransactionFound";
 import { COLORS } from "../../constants/colors";
 
 export default function Page() {
-  const { user } = useUser();
+    const userData = useUser();
+    const user = userData?.user;
   const router = useRouter();
 
   const { transactions, isLoading, summary, deleteTransaction, loadData } =
